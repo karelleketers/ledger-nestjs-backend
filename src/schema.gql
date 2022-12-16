@@ -1,0 +1,436 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Balance {
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  id: Int!
+  current: Int
+  profileId: Float
+  profile: Profile
+}
+
+"""
+`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+"""
+scalar Timestamp
+
+type Bill {
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  id: Int!
+  name: String!
+  amount: Int
+  paid: Boolean!
+  reminder: Boolean!
+  profileId: Int
+  profile: Profile
+}
+
+type CategoryIcon {
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  id: Int!
+  name: String!
+  categories: [Category!]
+}
+
+type Category {
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  id: Int!
+  name: String!
+  current: Int
+  total: Int
+  hidden: Boolean!
+  profileId: Int
+  profile: Profile
+  categoryIconId: Int
+  categoryIcon: CategoryIcon
+}
+
+type Entry {
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  id: Int!
+  incoming: Boolean!
+  amount: Int
+  category: String
+  description: String
+  type: String
+  profileId: Float
+  profile: Profile
+}
+
+type Questionnaire {
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  id: Int!
+  ageGroup: Int
+  improve: String
+  savedLastMonth: Boolean
+  goal: Boolean
+  profileId: Float
+  profile: Profile
+}
+
+type Savings {
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  id: Int!
+  name: String!
+  saved: Int
+  goal: Int
+  goal_date: Timestamp
+  amount: Int
+  type: String
+  complete: Boolean
+  profileId: Int
+  profile: Profile
+}
+
+type SavingsBalance {
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  id: Int!
+  total: Int
+  unassigned: Int
+  monthly_savings: String
+  profileId: Float
+  profile: Profile
+}
+
+type Profile {
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  id: Int!
+  firstName: String
+  lastName: String
+  bank: String
+  reminder: Boolean!
+  onboarding: String
+  userId: Float!
+  user: User!
+  questionnaire: Questionnaire
+  balance: Balance
+  savingsBalance: SavingsBalance
+  entries: [Entry!]
+  categories: [Category!]
+  savings: [Savings!]
+  bills: [Bill!]
+}
+
+type Loan {
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  id: Int!
+  amount: Int!
+  paid: Boolean!
+  reason: String
+  userloans: [UsersLoan!]
+}
+
+type UsersLoan {
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  id: Int!
+  userId: Int
+  user: User
+  loanId: Int
+  loan: Loan
+  owed: Boolean
+  inviteName: String
+  inviteEmail: String
+}
+
+type User {
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  id: Int!
+  email: String
+  password: String
+  isAdmin: Boolean
+  profile: Profile
+  userloans: [UsersLoan!]
+}
+
+type Id {
+  id: Int!
+}
+
+type OnBoarding {
+  onboarding: String!
+}
+
+type BillsAndCount {
+  items: [Bill!]
+  count: Int
+  unpaidCount: Int
+}
+
+type EntriesAndCount {
+  items: [Entry!]
+  count: Int
+}
+
+type CategoriesAndCount {
+  items: [Category!]
+  count: Int
+}
+
+type JwtToken {
+  token: String!
+}
+
+type SavingsAndCount {
+  items: [Savings!]
+  count: Int
+}
+
+type LoansAndCount {
+  items: [UsersLoan!]
+  count: Int
+}
+
+type Query {
+  users: [User!]!
+  getUser(email: String!): User!
+  getDetails: User!
+  profiles: [Profile!]!
+  getProfile(userId: Int!): Profile!
+  getOwnProfile: Profile!
+  bills: [Bill!]!
+  getBills(results: LoadMoreInput!): [BillsAndCount!]!
+  getBill(id: Float!): Bill!
+  getUnpaidBills: [Bill!]!
+  entries: [Entry!]!
+  getEntries(results: LoadMoreInput!): [EntriesAndCount!]!
+  getDashboardEntries: [Entry!]!
+  getEntry(id: Float!): Entry!
+  categories: [Category!]!
+  getCategories(results: LoadMoreInput!): [CategoriesAndCount!]!
+  getCategoriesList: [Category!]!
+  getCategory(id: Float!): Category!
+  getBalance: Balance!
+  getSavingsBalance: SavingsBalance!
+  whoAmI: User!
+  questionnaires: [Questionnaire!]!
+  getQuestionnaire: Questionnaire!
+  savings: [Savings!]!
+  getAllSavings(results: LoadMoreInput!): [SavingsAndCount!]!
+  getSavings(id: Float!): Savings!
+  categoryIcons: [CategoryIcon!]!
+  getCategoryIcon(name: String!): CategoryIcon!
+  loans: [Loan!]!
+  getLoans(results: LoadMoreInput!): [LoansAndCount!]!
+  getLoan(id: Float!): UsersLoan!
+}
+
+input LoadMoreInput {
+  limit: Int!
+  offset: Int!
+}
+
+type Mutation {
+  createUser(input: CreateUserInput!): User!
+  updateUser(input: UpdateUserInput!): User!
+  updateDetails(input: UpdateDetailsInput!): User!
+  removeUser: Id!
+  createProfile(input: CreateProfileInput!): Profile!
+  updateProfile(input: UpdateProfileInput!): Profile!
+  updateUserDetails(input: AdjustedUserInput!): Profile!
+  updateOwnProfile(input: UpdateOwnProfileInput!): Profile!
+  skipQuestionnaire: OnBoarding!
+  createBill(input: CreateBillInput!): Bill!
+  updateBill(input: UpdateBillInput!): Bill!
+  removeBill(id: Float!): Id!
+  createEntry(input: CreateEntryInput!): Entry!
+  updateEntry(input: UpdateEntryInput!): Entry!
+  removeEntry(id: Float!): Id!
+  updateSavingsEntry(input: AdjustSavingsInput!): SavingsBalance!
+  createCategory(input: CreateCategoryInput!): Category!
+  updateCategory(input: UpdateCategoryInput!): Category!
+  removeCategory(id: Float!): Id!
+  updateMonthlySavings(input: MonthlyInput!): SavingsBalance!
+  login(loginInput: AuthInput!): JwtToken!
+  refreshToken: JwtToken!
+  register(registerInput: AuthRegisterInput!): User!
+  updateQuestionnaire(input: UpdateQuestionnaireInput!): Questionnaire!
+  createSavings(input: CreateSavingsInput!): Savings!
+  updateSavings(input: UpdateSavingsInput!): Savings!
+  removeSavings(id: Float!): Id!
+  assignSavings(input: AssignInput!): SavingsBalance!
+  createCategoryIcon(name: String!): CategoryIcon!
+  updateCategoryIcon(name: String!): CategoryIcon!
+  removeCategoryIcon(name: String!): CategoryIcon!
+  createLoan(input: CreateLoanInput!): Loan!
+  updateLoan(input: UpdateLoanInput!): Loan!
+  removeLoan(id: Float!): Id!
+}
+
+input CreateUserInput {
+  email: String!
+  password: String!
+}
+
+input UpdateUserInput {
+  id: Int!
+  email: String!
+  isAdmin: Boolean = false
+}
+
+input UpdateDetailsInput {
+  email: String!
+  password: String!
+}
+
+input CreateProfileInput {
+  reminder: Boolean = true
+  firstName: String!
+  lastName: String!
+  onboarding: String = "initialised"
+  userId: Int!
+}
+
+input UpdateProfileInput {
+  firstName: String
+  lastName: String
+  bank: String
+  reminder: Boolean
+  userId: Int!
+}
+
+input AdjustedUserInput {
+  id: Int!
+  profileId: Int!
+  bank: String!
+}
+
+input UpdateOwnProfileInput {
+  firstName: String
+  lastName: String
+  bank: String
+  reminder: Boolean
+}
+
+input CreateBillInput {
+  name: String!
+  amount: Int
+}
+
+input UpdateBillInput {
+  name: String!
+  amount: Int
+  paid: Boolean!
+  id: Int!
+}
+
+input CreateEntryInput {
+  incoming: Boolean!
+  amount: Int!
+  categoryId: Int
+  category: String
+  description: String
+  type: String
+}
+
+input UpdateEntryInput {
+  incoming: Boolean!
+  amount: Int!
+  categoryId: Int
+  category: String
+  description: String
+  type: String
+  id: Int!
+}
+
+input AdjustSavingsInput {
+  amount: Int!
+  incoming: Boolean!
+}
+
+input CreateCategoryInput {
+  name: String!
+  total: Int
+  hidden: Boolean = false
+  categoryIconId: Int
+  current: Int!
+}
+
+input UpdateCategoryInput {
+  name: String!
+  total: Int
+  hidden: Boolean = false
+  categoryIconId: Int
+  current: Int!
+  id: Int!
+}
+
+input MonthlyInput {
+  id: Int!
+  monthly_savings: String!
+}
+
+input AuthInput {
+  email: String!
+  password: String!
+}
+
+input AuthRegisterInput {
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+  onboarding: String = "initialised"
+  reminder: Boolean = true
+}
+
+input UpdateQuestionnaireInput {
+  ageGroup: Int!
+  improve: String!
+  savedLastMonth: Boolean!
+  goal: Boolean!
+  balance: Int
+  savings: Int
+}
+
+input CreateSavingsInput {
+  name: String!
+  goal: Int
+  goal_date: Timestamp
+  amount: Int
+  type: String
+}
+
+input UpdateSavingsInput {
+  name: String!
+  goal: Int
+  goal_date: Timestamp
+  amount: Int
+  type: String
+  id: Int!
+}
+
+input AssignInput {
+  amount: Int!
+  incoming: Boolean!
+  savingsId: Int!
+}
+
+input CreateLoanInput {
+  invite: String!
+  amount: Int!
+  paid: Boolean = false
+  owed: Boolean!
+  reason: String
+}
+
+input UpdateLoanInput {
+  invite: String!
+  amount: Int!
+  paid: Boolean = false
+  owed: Boolean!
+  reason: String
+  id: Int!
+}
